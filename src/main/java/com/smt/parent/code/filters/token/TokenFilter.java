@@ -52,6 +52,8 @@ public class TokenFilter implements Filter {
 	 * @throws IOException 
 	 */
 	private boolean validate(String token, HttpServletResponse resp) throws IOException {
+		// TODO 这里还没有对token进行基本验证, 例如token是否为空, token值是否达标等
+		
 		TokenValidateResult result = restTemplate.exchange(new APIServer() {
 			
 			@Override

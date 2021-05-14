@@ -7,16 +7,20 @@ import java.util.Date;
  * @author DougLei
  */
 public class TokenEntity {
+	private Date currentDate = new Date();
 	private String token;// token
 	private String accountId;// 账户id
 	private String userId; // 用户id
-	private String projectId;// 项目id
+	private String projectCode;// 项目code
 	private String tenantId;// 租户id
 	private Date loginDate;// 登陆时间
 	private String clientIp;// 登陆的客户端ip
 	private Date lastOpDate;// 最后操作时间
 	private int loginFailTimes;// (连续)登录失败的次数
 	
+	public Date getCurrentDate() {
+		return currentDate;
+	}
 	public String getToken() {
 		return token;
 	}
@@ -35,11 +39,11 @@ public class TokenEntity {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getProjectId() {
-		return projectId;
+	public String getProjectCode() {
+		return projectCode;
 	}
-	public void setProjectId(String projectId) {
-		this.projectId = projectId;
+	public void setProjectCode(String projectCode) {
+		this.projectCode = projectCode;
 	}
 	public String getTenantId() {
 		return tenantId;
