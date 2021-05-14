@@ -1,5 +1,7 @@
 package com.smt.parent.code.spring.eureka.cloud.feign;
 
+import java.io.IOException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -25,8 +27,9 @@ public abstract class APIServer {
 	/**
 	 * 获取API头信息
 	 * @return
+	 * @throws IOException
 	 */
-	public HttpHeaders getHeaders() {
+	public HttpHeaders getHeaders() throws IOException {
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(MediaType.APPLICATION_JSON);
 		return header;

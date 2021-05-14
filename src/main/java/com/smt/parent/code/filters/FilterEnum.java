@@ -9,36 +9,59 @@ public enum FilterEnum {
 	/**
 	 * 跨域过滤器
 	 */
-	CORS(10, new String[] {"/*"}),
+	CORS(10),
 	
 	/**
 	 * 日志过滤器
 	 */
-	LOG(20, new String[] {"/*"}),
+	LOG(20) {
+		@Override
+		public String getHeaderName() {
+			return "_log";
+		}
+	},
 	
 	/**
 	 * token过滤器
 	 */
-	TOKEN(30, new String[] {"/*"});
+	TOKEN(30) {
+		@Override
+		public String getHeaderName() {
+			return "token";
+		}
+	};
 	
-
-	private String name;// 过滤器的name
-	private byte order;// 过滤器的顺序
-	private String[] urlPatterns;// 过滤器要拦截的url数组
-
-	private FilterEnum(int order, String[] urlPatterns) {
-		this.name = "smt-filter-" + name();
-		this.order = (byte)order;
-		this.urlPatterns = urlPatterns;
+	private int order;// 过滤器的顺序
+	private FilterEnum(int order) {
+		this.order = order;
 	}
 	
+	/**
+	 * 获取过滤器的name
+	 * @return
+	 */
 	public String getName() {
-		return name;
+		return "smt-filter-" + name();
 	}
-	public byte getOrder() {
+	/**
+	 * 获取过滤器的顺序
+	 * @return
+	 */
+	public int getOrder() {
 		return order;
 	}
+	/**
+	 * 过滤器在header中的name, 可为null
+	 * @return
+	 */
+	public String getHeaderName() {
+		return null;
+	}
+	/**
+	 * 过滤器要拦截的url数组
+	 * @return
+	 */
 	public String[] getUrlPatterns() {
-		return urlPatterns;
+		return new String[] {"/*"};
 	}
 }

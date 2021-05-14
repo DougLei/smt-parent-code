@@ -16,9 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSONObject;
 import com.douglei.tools.web.HttpUtil;
+import com.smt.parent.code.filters.FilterEnum;
 
 /**
- * 日志过滤器; 因为日志要读取请求体的数据, 而直接读取request后关闭, springmvc就无法读取, 所以这里对 {@link HttpServletRequest} 进行二次封装, 保证日志读取请求体后, springmvc也能读取
+ * 
  * @author DougLei
  */
 public class LogFilter implements Filter{
@@ -48,12 +49,12 @@ public class LogFilter implements Filter{
 		if(properties.getIgnoreUrlMatcher() != null && properties.getIgnoreUrlMatcher().match(request.getServletPath()))
 			return false;
 		
-		String str = request.getHeader("_log");
+		String str = request.getHeader(FilterEnum.LOG.getHeaderName());
 		if(str == null) 
 			return false;
 		
 		JSONObject json = JSONObject.parseObject(URLDecoder.decode(str, StandardCharsets.UTF_8.name()));
-		if(json.isEmpty())
+		if(json.isEmpty() || json.getBooleanValue("ignore"))
 			return false;
 		
 		LogOperation log = json.toJavaObject(LogOperation.class);

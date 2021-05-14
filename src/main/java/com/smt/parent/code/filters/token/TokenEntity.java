@@ -12,10 +12,10 @@ public class TokenEntity {
 	private String userId; // 用户id
 	private String projectId;// 项目id
 	private String tenantId;// 租户id
-	private int tryTimes;// 尝试登陆次数
 	private Date loginDate;// 登陆时间
 	private String clientIp;// 登陆的客户端ip
 	private Date lastOpDate;// 最后操作时间
+	private int loginFailTimes;// (连续)登录失败的次数
 	
 	public String getToken() {
 		return token;
@@ -59,16 +59,16 @@ public class TokenEntity {
 	public void setClientIp(String clientIp) {
 		this.clientIp = clientIp;
 	}
-	public int getTryTimes() {
-		return tryTimes;
-	}
-	public void setTryTimes(int tryTimes) {
-		this.tryTimes = tryTimes;
-	}
 	public Date getLastOpDate() {
 		return lastOpDate;
 	}
 	public void setLastOpDate(Date lastOpDate) {
 		this.lastOpDate = lastOpDate;
+	}
+	public int getLoginFailTimes() {
+		return loginFailTimes;
+	}
+	public void setLoginFailTimes(int loginFailTimes) {
+		this.loginFailTimes = loginFailTimes;
 	}
 }

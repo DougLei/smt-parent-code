@@ -47,7 +47,7 @@ public class ResponseContext {
 	}
 	
 	/**
-	 * 清理数据; 如果存在则清楚, 否则什么都不做
+	 * 清理数据; 如果存在则清除, 否则什么都不做
 	 */
 	public static void clear() {
 		if(CONTEXT.get() != null)
