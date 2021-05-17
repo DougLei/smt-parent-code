@@ -52,20 +52,10 @@ public class TokenEntity {
 			currentDate = new Date();
 		return currentDate;
 	}
-	public Date getCurrentDate(boolean cache) { // cache是否使用缓存数据
-		if(cache)
-			return getCurrentDate();
-		return new Date();
-	}
 	public String getUUID() {
 		if(uuid == null)
 			uuid = UUID.randomUUID().toString();
 		return uuid;
-	}
-	public String getUUID(boolean cache) {  // cache是否使用缓存数据
-		if(cache)
-			return getUUID();
-		return UUID.randomUUID().toString();
 	}
 	
 	// -------------------------------------------------------------------------------------------------

@@ -17,10 +17,7 @@ public class LogOperation {
 	private String componentName;
 	private String funcId;
 	private String funcName;
-	private int clientType;
-	private String clientInstanceName;
 	private String clientIp;
-	private String clientMAC;
 	private String userId;
 	private Date operDate;
 	private LogRequest logRequest;
@@ -85,29 +82,11 @@ public class LogOperation {
 	public void setFuncName(String funcName) {
 		this.funcName = funcName;
 	}
-	public int getClientType() {
-		return clientType;
-	}
-	public void setClientType(int clientType) {
-		this.clientType = clientType;
-	}
-	public String getClientInstanceName() {
-		return clientInstanceName;
-	}
-	public void setClientInstanceName(String clientInstanceName) {
-		this.clientInstanceName = clientInstanceName;
-	}
 	public String getClientIp() {
 		return clientIp;
 	}
 	public void setClientIp(String clientIp) {
 		this.clientIp = clientIp;
-	}
-	public String getClientMAC() {
-		return clientMAC;
-	}
-	public void setClientMAC(String clientMAC) {
-		this.clientMAC = clientMAC;
 	}
 	public String getUserId() {
 		return userId;

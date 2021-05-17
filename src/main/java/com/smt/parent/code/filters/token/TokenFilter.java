@@ -63,7 +63,7 @@ public class TokenFilter implements Filter {
 			
 			@Override
 			public String getUrl() {
-				return "http://smt-base/account/token/validate/" + token;
+				return "http://smt-base/user/token/validate/" + token;
 			}
 			
 			@Override
