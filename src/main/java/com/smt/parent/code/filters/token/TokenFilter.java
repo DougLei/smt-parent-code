@@ -1,8 +1,6 @@
 package com.smt.parent.code.filters.token;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -13,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
 import com.douglei.tools.web.HttpUtil;
@@ -66,13 +63,6 @@ public class TokenFilter implements Filter {
 				return "http://smt-base/token/validate/" + req.getHeader(FilterEnum.TOKEN.getHeaderName()) + "?clientIp=" + HttpUtil.getClientIp(req);
 			}
 			
-			@Override
-			public HttpHeaders getHeaders() throws IOException {
-				HttpHeaders header = super.getHeaders();
-				header.set(FilterEnum.LOG.getHeaderName(), URLEncoder.encode("{\"ignore\":true}", StandardCharsets.UTF_8.name())); // 从这去验证token不记录日志
-				return header;
-			}
-
 			@Override
 			public HttpMethod getRequestMethod() {
 				return HttpMethod.GET;
