@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
+import com.douglei.tools.web.HttpUtil;
 import com.smt.parent.code.filters.FilterEnum;
 import com.smt.parent.code.filters.log.LogContext;
 import com.smt.parent.code.response.Response;
@@ -39,21 +40,20 @@ public class TokenFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		if((properties.getIgnoreUrlMatcher() == null || !properties.getIgnoreUrlMatcher().match(request.getServletPath())) 
-				&& !validate(request.getHeader(FilterEnum.TOKEN.getHeaderName()), (HttpServletResponse)response)) 
+				&& !validate(request, (HttpServletResponse)response)) 
 			return;
 		chain.doFilter(req, response);
 	}
 	
 	/**
 	 * 验证token
-	 * @param token
+	 * @param request
 	 * @param resp
-	 * @return 验证是否成功
+	 * @return 
 	 * @throws IOException 
 	 */
-	private boolean validate(String token, HttpServletResponse resp) throws IOException {
+	private boolean validate(HttpServletRequest request, HttpServletResponse resp) throws IOException {
 		// TODO 这里还没有对token进行基本验证, 例如token是否为空, token值是否达标等
-		
 		TokenValidateResult result = restTemplate.exchange(new APIServer() {
 			
 			@Override
@@ -63,7 +63,7 @@ public class TokenFilter implements Filter {
 			
 			@Override
 			public String getUrl() {
-				return "http://smt-base/user/token/validate/" + token;
+				return "http://smt-base/token/validate/" + request.getHeader(FilterEnum.TOKEN.getHeaderName()) + "?clientIp=" + HttpUtil.getClientIp(request);
 			}
 			
 			@Override

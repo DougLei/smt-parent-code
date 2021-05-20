@@ -12,7 +12,7 @@ import com.smt.parent.code.response.data.ExceptionData;
 import com.smt.parent.code.response.data.ValidationData;
 
 /**
- * 响应
+ * 
  * @author DougLei
  */
 public class Response {
