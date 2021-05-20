@@ -47,12 +47,12 @@ public class TokenFilter implements Filter {
 	
 	/**
 	 * 验证token
-	 * @param request
+	 * @param req
 	 * @param resp
 	 * @return 
 	 * @throws IOException 
 	 */
-	private boolean validate(HttpServletRequest request, HttpServletResponse resp) throws IOException {
+	private boolean validate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		// TODO 这里还没有对token进行基本验证, 例如token是否为空, token值是否达标等
 		TokenValidateResult result = restTemplate.exchange(new APIServer() {
 			
@@ -63,7 +63,7 @@ public class TokenFilter implements Filter {
 			
 			@Override
 			public String getUrl() {
-				return "http://smt-base/token/validate/" + request.getHeader(FilterEnum.TOKEN.getHeaderName()) + "?clientIp=" + HttpUtil.getClientIp(request);
+				return "http://smt-base/token/validate/" + req.getHeader(FilterEnum.TOKEN.getHeaderName()) + "?clientIp=" + HttpUtil.getClientIp(req);
 			}
 			
 			@Override
