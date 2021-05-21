@@ -51,6 +51,7 @@ public class TokenFilter implements Filter {
 	 * @throws IOException 
 	 */
 	private boolean validate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		String token = req.getHeader(FilterEnum.TOKEN.getHeaderName());
 		TokenValidateResult result = restTemplate.exchange(new APIServer() {
 			
 			@Override
@@ -60,7 +61,7 @@ public class TokenFilter implements Filter {
 			
 			@Override
 			public String getUrl() {
-				return "http://smt-base/token/validate/" + req.getHeader(FilterEnum.TOKEN.getHeaderName()) + "?clientIp=" + HttpUtil.getClientIp(req);
+				return "http://smt-base/token/validate/" + token + "?clientIp=" + HttpUtil.getClientIp(req);
 			}
 			
 			@Override
@@ -71,18 +72,17 @@ public class TokenFilter implements Filter {
 		}, null, TokenValidateResult.class).getBody();
 		
 		// 在日志中记录请求操作的用户id
-		TokenEntity token  = result.getEntity();
-		if(token != null) 
-			LogContext.loggingUserId(token.getUserId());
+		if(result.getEntity() != null) 
+			LogContext.loggingUserId(result.getEntity().getUserId());
 			
 		// 验证成功, 则记录token数据, 并继续
 		if(result.isSuccess()) {
-			TokenContext.set(token);
+			TokenContext.set(result.getEntity());
 			return true;
 		}
 		
 		// 验证失败, 输出失败的具体信息, 并记录日志
-		Response response = new Response(null, null, result.getMessage(), result.getCode());
+		Response response = new Response(token, null, result.getMessage(), result.getCode());
 		LogContext.loggingResponse(response);
 		ResponseUtil.writeJSON(resp, response.toJSONString());
 		return false;
