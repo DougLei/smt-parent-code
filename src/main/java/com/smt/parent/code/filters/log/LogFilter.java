@@ -54,13 +54,12 @@ public class LogFilter implements Filter{
 			return false;
 		
 		JSONObject json = JSONObject.parseObject(URLDecoder.decode(str, StandardCharsets.UTF_8.name()));
-		if(json.isEmpty() || json.getBooleanValue("ignore"))
+		if(json.isEmpty())
 			return false;
 		
 		LogOperation log = json.toJavaObject(LogOperation.class);
-		if(log.getClientIp() == null)
-			log.setClientIp(HttpUtil.getClientIp(request));
 		log.setOperDate(new Date());
+		log.setClientIp(HttpUtil.getClientIp(request));
 		log.setLogRequest(extractRequestLog(request, log));
 		
 		LogContext.set(log);

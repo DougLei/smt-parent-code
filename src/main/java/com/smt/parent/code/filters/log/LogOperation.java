@@ -9,7 +9,8 @@ import java.util.Date;
 public class LogOperation {
 	private int id;
 	private String batch;
-	private int level;
+	private Integer type;
+	private Integer level;
 	private String description;
 	private String moduleId;
 	private String moduleName;
@@ -17,9 +18,9 @@ public class LogOperation {
 	private String componentName;
 	private String funcId;
 	private String funcName;
-	private String clientIp;
 	private String userId;
 	private Date operDate;
+	private String clientIp;
 	private LogRequest logRequest;
 	
 	public int getId() {
@@ -34,10 +35,16 @@ public class LogOperation {
 	public void setBatch(String batch) {
 		this.batch = batch;
 	}
-	public int getLevel() {
+	public Integer getType() {
+		return type;
+	}
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	public Integer getLevel() {
 		return level;
 	}
-	public void setLevel(int level) {
+	public void setLevel(Integer level) {
 		this.level = level;
 	}
 	public String getDescription() {
@@ -82,12 +89,6 @@ public class LogOperation {
 	public void setFuncName(String funcName) {
 		this.funcName = funcName;
 	}
-	public String getClientIp() {
-		return clientIp;
-	}
-	public void setClientIp(String clientIp) {
-		this.clientIp = clientIp;
-	}
 	public String getUserId() {
 		return userId;
 	}
@@ -99,6 +100,12 @@ public class LogOperation {
 	}
 	public void setOperDate(Date operDate) {
 		this.operDate = operDate;
+	}
+	public String getClientIp() {
+		return clientIp;
+	}
+	public void setClientIp(String clientIp) {
+		this.clientIp = clientIp;
 	}
 	public LogRequest getLogRequest() {
 		return logRequest;

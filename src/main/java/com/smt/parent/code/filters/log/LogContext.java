@@ -29,6 +29,18 @@ public class LogContext {
 	}
 	
 	/**
+	 * 记录请求操作的用户id
+	 * @param userId
+	 */
+	public static void loggingUserId(String userId) {
+		LogOperation log = LOG_CONTEXT.get();
+		if(log == null)
+			return;
+		
+		log.setUserId(userId);
+	}
+	
+	/**
 	 * 记录请求操作的响应体
 	 * @param response
 	 */

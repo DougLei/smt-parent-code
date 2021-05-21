@@ -40,6 +40,7 @@ public class TokenFilter implements Filter {
 				&& !validate(request, (HttpServletResponse)response)) 
 			return;
 		chain.doFilter(req, response);
+		TokenContext.remove();
 	}
 	
 	/**
@@ -50,7 +51,6 @@ public class TokenFilter implements Filter {
 	 * @throws IOException 
 	 */
 	private boolean validate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		// TODO 这里还没有对token进行基本验证, 例如token是否为空, token值是否达标等
 		TokenValidateResult result = restTemplate.exchange(new APIServer() {
 			
 			@Override
@@ -70,14 +70,19 @@ public class TokenFilter implements Filter {
 
 		}, null, TokenValidateResult.class).getBody();
 		
+		// 在日志中记录请求操作的用户id
+		TokenEntity token  = result.getEntity();
+		if(token != null) 
+			LogContext.loggingUserId(token.getUserId());
+			
 		// 验证成功, 则记录token数据, 并继续
 		if(result.isSuccess()) {
-			TokenContext.set(result.getEntity());
+			TokenContext.set(token);
 			return true;
 		}
 		
-		// 验证失败, 输出失败的具体信息
-		Response response = new Response(null, null, result.getMessage(), result.getCode(), result.getParams());
+		// 验证失败, 输出失败的具体信息, 并记录日志
+		Response response = new Response(null, null, result.getMessage(), result.getCode());
 		LogContext.loggingResponse(response);
 		ResponseUtil.writeJSON(resp, response.toJSONString());
 		return false;

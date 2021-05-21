@@ -16,6 +16,13 @@ public class TokenContext {
 	}
 	
 	/**
+	 * 移除Token数据实例
+	 */
+	static void remove() {
+		CONTEXT.remove();
+	}
+	
+	/**
 	 * 获取Token数据实例
 	 * @return
 	 */

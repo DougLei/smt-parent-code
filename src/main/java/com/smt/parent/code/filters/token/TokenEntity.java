@@ -19,6 +19,7 @@ public class TokenEntity {
 	private String tenantId;// 租户id
 	private Date loginDate;// 登陆时间
 	private Date lastOpDate;// 最后操作时间
+	private int clientType; // 客户端类型
 	private String clientIp;// 登陆的客户端ip
 	private Map<String, Object> extend; // 扩展信息
 	
@@ -51,6 +52,9 @@ public class TokenEntity {
 	}
 	public Date getLastOpDate() {
 		return lastOpDate;
+	}
+	public int getClientType() {
+		return clientType;
 	}
 	public String getClientIp() {
 		return clientIp;
@@ -89,6 +93,9 @@ public class TokenEntity {
 	}
 	public void setLastOpDate(Date lastOpDate) {
 		this.lastOpDate = lastOpDate;
+	}
+	public void setClientType(int clientType) {
+		this.clientType = clientType;
 	}
 	public void setClientIp(String clientIp) {
 		this.clientIp = clientIp;
