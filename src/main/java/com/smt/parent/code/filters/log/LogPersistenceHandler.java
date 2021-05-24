@@ -32,7 +32,7 @@ public class LogPersistenceHandler {
 				
 				@Override
 				public String getUrl() {
-					return "http://smt-log/log/add_";
+					return "http://smt-log/smt-log/log/add_";
 				}
 				
 			}, JSONObject.toJSONString(log), null);

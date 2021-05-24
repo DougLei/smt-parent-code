@@ -80,8 +80,8 @@ public class TokenFilter implements Filter {
 		if(StringUtil.unEmpty(token_) && token_.startsWith("%7B")) 
 			return new TokenValidateResult(JSONObject.parseObject(URLDecoder.decode(token_, StandardCharsets.UTF_8.name()), TokenEntity.class));
 			
-		String _token = req.getHeader(FilterEnum.TOKEN.getHeaderName());
-		if(StringUtil.isEmpty(_token))
+		String token = req.getHeader(FilterEnum.TOKEN.getHeaderName());
+		if(StringUtil.isEmpty(token))
 			return new TokenValidateResult(null, "token不能为空", "smt.parent.token.filter.validate.isnull");
 		
 		try {
@@ -94,7 +94,7 @@ public class TokenFilter implements Filter {
 				
 				@Override
 				public String getUrl() {
-					return "http://smt-base/token/validate/" + _token + "?clientIp=" + HttpUtil.getClientIp(req);
+					return "http://smt-base/smt-base/token/validate/" + token + "?clientIp=" + HttpUtil.getClientIp(req);
 				}
 				
 				@Override
