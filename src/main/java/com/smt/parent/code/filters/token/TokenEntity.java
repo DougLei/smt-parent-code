@@ -13,6 +13,7 @@ public class TokenEntity {
 	private String value;// token值
 	private int accountId;// 账户id
 	private String userId; // 用户id
+	private String userName; // 用户name
 	private List<String> orgs; // 所在的组织机构code
 	private List<String> roles; // 所拥有的角色code
 	private List<String> posts; // 所拥有的岗位code
@@ -32,6 +33,9 @@ public class TokenEntity {
 	}
 	public String getUserId() {
 		return userId;
+	}
+	public String getUserName() {
+		return userName;
 	}
 	public List<String> getOrgs() {
 		return orgs;
@@ -73,6 +77,9 @@ public class TokenEntity {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public void setOrgs(List<String> orgs) {
 		this.orgs = orgs;
