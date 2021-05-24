@@ -9,16 +9,18 @@ public class TokenValidateResult {
 	private TokenEntity entity; // token数据, 验证成功时会存储相应的数据
 	private String message; // 记录验证失败时的消息
 	private String code; // 记录验证失败时的国际化编码
+	private Object[] params; // 记录验证失败时的国际化编码需要的参数
 	
 	public TokenValidateResult() {}
 	public TokenValidateResult(TokenEntity entity) {
 		this.success = true;
 		this.entity = entity;
 	}
-	public TokenValidateResult(TokenEntity entity, String message, String code) {
+	public TokenValidateResult(TokenEntity entity, String message, String code, Object... params) {
 		this.entity = entity;
 		this.message = message;
 		this.code = code;
+		this.params = params;
 	}
 	
 	public boolean isSuccess() {
@@ -44,5 +46,11 @@ public class TokenValidateResult {
 	}
 	public void setCode(String code) {
 		this.code = code;
+	}
+	public Object[] getParams() {
+		return params;
+	}
+	public void setParams(Object[] params) {
+		this.params = params;
 	}
 }

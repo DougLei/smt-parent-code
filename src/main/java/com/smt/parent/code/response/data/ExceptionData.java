@@ -15,7 +15,7 @@ public class ExceptionData extends Data {
 	private static final Logger logger = LoggerFactory.getLogger(ExceptionData.class);
 	
 	public ExceptionData(Exception exception) {
-		super(null, "系统异常, 联系管理员查看日志, exceptionId=[%s]", "smt.system.exception", UUID.randomUUID());
+		super(null, "系统异常, 联系管理员查看日志, exceptionId=[%s]", "smt.parent.system.exception", UUID.randomUUID().toString());
 		logger.error("系统异常, exceptionId=[{}], exceptionDetail=\n{}", getParams()[0], ExceptionUtil.getStackTrace(exception));
 	}
 }

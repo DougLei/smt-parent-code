@@ -41,14 +41,15 @@ public class LogContext {
 	}
 	
 	/**
-	 * 记录请求操作的响应体
+	 * 记录请求操作的响应信息
 	 * @param response
+	 * @param loggingBody 是否记录响应体
 	 */
-	public static void loggingResponse(Response response) {
+	public static void loggingResponse(Response response, boolean loggingBody) {
 		LogOperation log = LOG_CONTEXT.get();
 		if(log == null)
 			return;
 		
-		log.getLogRequest().setResponse(response);
+		log.getLogRequest().setResponse(response, loggingBody);
 	}
 }

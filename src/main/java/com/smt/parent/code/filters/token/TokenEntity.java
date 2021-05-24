@@ -1,6 +1,7 @@
 package com.smt.parent.code.filters.token;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,9 +13,9 @@ public class TokenEntity {
 	private String value;// token值
 	private int accountId;// 账户id
 	private String userId; // 用户id
-	private String[] orgs; // 所在的组织机构code
-	private String[] roles; // 所拥有的角色code
-	private String[] posts; // 所拥有的岗位code
+	private List<String> orgs; // 所在的组织机构code
+	private List<String> roles; // 所拥有的角色code
+	private List<String> posts; // 所拥有的岗位code
 	private String projectCode; // 当前所在的项目code
 	private String tenantId;// 租户id
 	private Date loginDate;// 登陆时间
@@ -32,13 +33,13 @@ public class TokenEntity {
 	public String getUserId() {
 		return userId;
 	}
-	public String[] getOrgs() {
+	public List<String> getOrgs() {
 		return orgs;
 	}
-	public String[] getRoles() {
+	public List<String> getRoles() {
 		return roles;
 	}
-	public String[] getPosts() {
+	public List<String> getPosts() {
 		return posts;
 	}
 	public String getProjectCode() {
@@ -73,13 +74,13 @@ public class TokenEntity {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public void setOrgs(String[] orgs) {
+	public void setOrgs(List<String> orgs) {
 		this.orgs = orgs;
 	}
-	public void setRoles(String[] roles) {
+	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
-	public void setPosts(String[] posts) {
+	public void setPosts(List<String> posts) {
 		this.posts = posts;
 	}
 	public void setProjectCode(String projectCode) {

@@ -1,6 +1,9 @@
 package com.smt.parent.code.filters.token;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -10,9 +13,14 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 
+import com.alibaba.fastjson.JSONObject;
+import com.douglei.tools.ExceptionUtil;
+import com.douglei.tools.StringUtil;
 import com.douglei.tools.web.HttpUtil;
 import com.smt.parent.code.filters.FilterEnum;
 import com.smt.parent.code.filters.log.LogContext;
@@ -26,6 +34,7 @@ import com.smt.parent.code.spring.eureka.cloud.feign.RestTemplateWrapper;
  * @author DougLei
  */
 public class TokenFilter implements Filter {
+	private static final Logger logger = LoggerFactory.getLogger(TokenFilter.class);
 	
 	@Autowired
 	private TokenConfigurationProperties properties;
@@ -43,48 +52,61 @@ public class TokenFilter implements Filter {
 		TokenContext.remove();
 	}
 	
-	/**
-	 * 验证token
-	 * @param req
-	 * @param resp
-	 * @return 
-	 * @throws IOException 
-	 */
+	// 验证token
 	private boolean validate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		String token = req.getHeader(FilterEnum.TOKEN.getHeaderName());
-		TokenValidateResult result = restTemplate.exchange(new APIServer() {
-			
-			@Override
-			public String getName() {
-				return "(同步)验证Token API";
-			}
-			
-			@Override
-			public String getUrl() {
-				return "http://smt-base/token/validate/" + token + "?clientIp=" + HttpUtil.getClientIp(req);
-			}
-			
-			@Override
-			public HttpMethod getRequestMethod() {
-				return HttpMethod.GET;
-			}
-
-		}, null, TokenValidateResult.class).getBody();
+		TokenValidateResult result = validate_(req);
 		
 		// 在日志中记录请求操作的用户id
-		if(result.getEntity() != null) 
-			LogContext.loggingUserId(result.getEntity().getUserId());
+		TokenEntity entity = result.getEntity();
+		if(entity != null) 
+			LogContext.loggingUserId(entity.getUserId());
 			
 		// 验证成功, 则记录token数据, 并继续
 		if(result.isSuccess()) {
-			TokenContext.set(result.getEntity());
+			TokenContext.set(entity);
 			return true;
 		}
 		
 		// 验证失败, 输出失败的具体信息, 并记录日志
-		Response response = new Response(token, null, result.getMessage(), result.getCode());
-		LogContext.loggingResponse(response);
+		Response response = new Response(null, null, result.getMessage(), result.getCode(), result.getParams());
+		LogContext.loggingResponse(response, true);
 		ResponseUtil.writeJSON(resp, response.toJSONString());
 		return false;
+	}
+	
+	// 验证token
+	private TokenValidateResult validate_(HttpServletRequest req) throws IOException {
+		String token_ = req.getHeader("token_");
+		if(StringUtil.unEmpty(token_) && token_.startsWith("%7B")) 
+			return new TokenValidateResult(JSONObject.parseObject(URLDecoder.decode(token_, StandardCharsets.UTF_8.name()), TokenEntity.class));
+			
+		String _token = req.getHeader(FilterEnum.TOKEN.getHeaderName());
+		if(StringUtil.isEmpty(_token))
+			return new TokenValidateResult(null, "token不能为空", "smt.parent.token.filter.validate.isnull");
+		
+		try {
+			return restTemplate.exchange(new APIServer() {
+				
+				@Override
+				public String getName() {
+					return "(同步)验证Token";
+				}
+				
+				@Override
+				public String getUrl() {
+					return "http://smt-base/token/validate/" + _token + "?clientIp=" + HttpUtil.getClientIp(req);
+				}
+				
+				@Override
+				public HttpMethod getRequestMethod() {
+					return HttpMethod.GET;
+				}
+
+			}, null, TokenValidateResult.class).getBody();
+		} catch (Exception e) {
+			String exceptionId = UUID.randomUUID().toString();
+			logger.error("(同步)验证token异常, exceptionId=[{}], exceptionDetail=\n{}", exceptionId, ExceptionUtil.getStackTrace(e));
+			return new TokenValidateResult(null, "(同步)验证token异常, 联系管理员查看日志, exceptionId=[%s]", "smt.parent.token.filter.validate.exception", exceptionId);
+		}
 	}
 }

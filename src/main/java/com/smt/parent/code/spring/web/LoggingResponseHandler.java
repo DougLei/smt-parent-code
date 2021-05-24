@@ -28,7 +28,7 @@ public class LoggingResponseHandler implements ResponseBodyAdvice<Response> {
 			Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
 			ServerHttpResponse response) {
 		
-		LogContext.loggingResponse(body);
+		LogContext.loggingResponse(body, returnType.getMethodAnnotation(LoggingResponse.class).loggingBody());
 		return body;
 	}
 }

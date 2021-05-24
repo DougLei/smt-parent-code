@@ -25,9 +25,11 @@ public class LogRequest {
 	/**
 	 * 设置响应信息
 	 * @param response
+	 * @param setBody 是否记录响应体
 	 */
-	public void setResponse(Response response) {
-		this.respBody = response.toJSONString();
+	public void setResponse(Response response, boolean setBody) {
+		if(setBody)
+			this.respBody = response.toJSONString();
 		this.respDate = new Date();
 		this.state = response.getState();
 	}

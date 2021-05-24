@@ -27,17 +27,17 @@ public class LogPersistenceHandler {
 				
 				@Override
 				public String getName() {
-					return "(异步)保存日志API";
+					return "(异步)保存日志";
 				}
 				
 				@Override
 				public String getUrl() {
 					return "http://smt-log/log/add_";
 				}
-
-			}, JSONObject.toJSONString(log), String.class);
+				
+			}, JSONObject.toJSONString(log), null);
 		} catch (Exception e) {
-			logger.error("调用(异步)保存日志API时, 出现异常: {}", ExceptionUtil.getStackTrace(e));
+			logger.error("(异步)保存日志异常: {}", ExceptionUtil.getStackTrace(e));
 		}
 	}
 }

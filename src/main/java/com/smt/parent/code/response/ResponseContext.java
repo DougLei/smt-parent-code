@@ -27,22 +27,23 @@ public class ResponseContext {
 	 * @return
 	 */
 	public static Response getAndRemove() {
-		return getAndRemove(false);
+		return getAndRemove(false, true);
 	}
 	
 	/**
 	 * 获取并移除响应体; 如果不存在响应体则会抛出异常
 	 * @param isBatch 是否批量操作数据
+	 * @param loggingBody 是否记录响应体
 	 * @return
 	 */
-	public static Response getAndRemove(boolean isBatch) {
+	public static Response getAndRemove(boolean isBatch, boolean loggingBody) {
 		Response response = CONTEXT.get();
 		if(response == null) 
 			throw new NullPointerException("response body is null, can not remove");
 		CONTEXT.remove();
 		
 		response.setBatch(isBatch);
-		LogContext.loggingResponse(response);
+		LogContext.loggingResponse(response, loggingBody);
 		return response;
 	}
 	

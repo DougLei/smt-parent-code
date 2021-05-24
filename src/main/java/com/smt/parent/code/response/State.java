@@ -34,4 +34,26 @@ public enum State {
 	public int getValue() {
 		return value;
 	}
+	
+	/**
+	 * 根据标识值获取State实例
+	 * @param value
+	 * @return
+	 */
+	public static State valueOf(int value) {
+		switch(value) {
+			case -2:
+				return UNKNOW;
+			case -1:
+				return EXCEPTION;
+			case 0:
+				return FAILURE;
+			case 1:
+				return SUCCESS;
+			case 2:
+				return PARTIAL_SUCCESS;
+			default:
+				throw new IllegalArgumentException("不存在value为["+value+"]的State Enum");
+		}
+	}
 }

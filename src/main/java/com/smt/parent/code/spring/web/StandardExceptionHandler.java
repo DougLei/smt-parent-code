@@ -31,7 +31,7 @@ public class StandardExceptionHandler implements HandlerExceptionResolver{
 			ResponseContext.clear();
 			
 			Response response = new Response(ex);
-			LogContext.loggingResponse(response);
+			LogContext.loggingResponse(response, true);
 			ResponseUtil.writeJSON(resp, response.toJSONString());
 		} catch (IOException e) {
 			logger.error("向调用端输出异常响应体时出现错误: {}", ExceptionUtil.getStackTrace(e));

@@ -51,7 +51,7 @@ public enum FilterEnum {
 		return order;
 	}
 	/**
-	 * 过滤器在header中的name, 可为null
+	 * 过滤器在header中的name
 	 * @return
 	 */
 	public String getHeaderName() {
