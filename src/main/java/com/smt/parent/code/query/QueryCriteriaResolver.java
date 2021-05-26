@@ -122,6 +122,10 @@ public class QueryCriteriaResolver implements HandlerMethodArgumentResolver {
 
 	// 获取Parameter实例
 	private AbstractParameter getParameter(String name, String value) {
+		int commaIndex = name.indexOf(',');
+		if(commaIndex != -1)
+			name = name.substring(0, commaIndex);
+		
 		int splitIndex = 0;
 		for(; splitIndex < value.length(); splitIndex++) {
 			if(value.charAt(splitIndex) == '(')
