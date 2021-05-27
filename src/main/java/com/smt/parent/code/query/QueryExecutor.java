@@ -175,6 +175,9 @@ public class QueryExecutor {
 				break;
 		}
 		
+		if(splitIndex == value.length())
+			return new Parameter(false, Operator.EQ, name, value);
+		
 		String val = value.substring(splitIndex+1, value.length()-1);
 		if(val.equalsIgnoreCase("null"))
 			return new Parameter(false, Operator.valueOf(value.substring(0, splitIndex).toUpperCase()), name);
