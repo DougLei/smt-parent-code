@@ -15,9 +15,10 @@ public class TokenEntity {
 	private String userId; // 用户id
 	private String userName; // 用户name
 	private List<String> orgs; // 所在的组织机构code
-	private List<String> roles; // 所拥有的角色code
 	private List<String> posts; // 所拥有的岗位code
+	private List<String> roles; // 所拥有的角色code
 	private String projectCode; // 当前所在的项目code
+	private List<String> parentProjectCodes; // 当前项目的所有父项目code
 	private String tenantId;// 租户id
 	private Date loginDate;// 登陆时间
 	private Date lastOpDate;// 最后操作时间
@@ -40,14 +41,17 @@ public class TokenEntity {
 	public List<String> getOrgs() {
 		return orgs;
 	}
-	public List<String> getRoles() {
-		return roles;
-	}
 	public List<String> getPosts() {
 		return posts;
 	}
+	public List<String> getRoles() {
+		return roles;
+	}
 	public String getProjectCode() {
 		return projectCode;
+	}
+	public List<String> getParentProjectCodes() {
+		return parentProjectCodes;
 	}
 	public String getTenantId() {
 		return tenantId;
@@ -84,14 +88,17 @@ public class TokenEntity {
 	public void setOrgs(List<String> orgs) {
 		this.orgs = orgs;
 	}
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
 	public void setPosts(List<String> posts) {
 		this.posts = posts;
 	}
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
 	public void setProjectCode(String projectCode) {
 		this.projectCode = projectCode;
+	}
+	public void setParentProjectCodes(List<String> parentProjectCodes) {
+		this.parentProjectCodes = parentProjectCodes;
 	}
 	public void setTenantId(String tenantId) {
 		this.tenantId = tenantId;
