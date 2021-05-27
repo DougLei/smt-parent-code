@@ -66,7 +66,7 @@ public class QueryCriteriaResolver implements HandlerMethodArgumentResolver {
 			return build(new CountQueryMode(), json);
 		
 		if("PAGE_QUERY".equals(mode))
-			return build(new PageQueryMode(json.getIntValue("$pageNum$"), json.getIntValue("$pageSize$")), json);
+			return build(new PageQueryMode(json.getIntValue("_page"), json.getIntValue("_rows")), json);
 		
 		if("RECURSIVE_QUERY".equals(mode)) {
 			RecursiveEntity entity = new RecursiveEntity();
@@ -75,7 +75,7 @@ public class QueryCriteriaResolver implements HandlerMethodArgumentResolver {
 		}
 		
 		if("PAGE_RECURSIVE_QUERY".equals(mode)) {
-			PageRecursiveEntity entity = new PageRecursiveEntity(json.getIntValue("$pageNum$"), json.getIntValue("$pageSize$"));
+			PageRecursiveEntity entity = new PageRecursiveEntity(json.getIntValue("_page"), json.getIntValue("_rows"));
 			setPropertyValues(json, entity);
 			return build(new PageRecursiveQueryMode(entity), json);
 		}
