@@ -36,21 +36,39 @@ import com.smt.parent.code.response.Response;
 public class QueryExecutor {
 	
 	/**
-	 * 
+	 * 执行查询
 	 * @param name
 	 * @param sqlParameter
 	 * @param request
+	 * @param excludeParameter 从Request.Parameter中要排除的参数名数组
 	 * @return
 	 */
 	@Transaction(propagationBehavior=PropagationBehavior.SUPPORTS)
-	public Response execute(String name, Object sqlParameter, HttpServletRequest request) {
-		QueryCriteriaEntity entity = resolve(request);
-		return execute_(name, sqlParameter, entity);
+	public Response execute(String name, Object sqlParameter, HttpServletRequest request, String... excludeParameter) {
+		QueryCriteriaEntity entity = parse(request, excludeParameter);
+		return execute(name, sqlParameter, entity);
 	}
 	
-	// 解析获取QueryCriteriaEntity
-	private QueryCriteriaEntity resolve(HttpServletRequest request) {
-		Map<String, String> urlParams = extractUrlParams(request);
+	/**
+	 * 执行查询
+	 * @param name
+	 * @param sqlParameter
+	 * @param entity
+	 * @return
+	 */
+	@Transaction(propagationBehavior=PropagationBehavior.SUPPORTS)
+	public Response execute(String name, Object sqlParameter, QueryCriteriaEntity entity) {
+		return new Response(entity.getMode().executeQuery(name, sqlParameter, entity.getParameters()));
+	}
+	
+	/**
+	 * 解析获取QueryCriteriaEntity
+	 * @param request
+	 * @param excludeParameter  从Request.Parameter中要排除的参数名数组
+	 * @return
+	 */
+	public QueryCriteriaEntity parse(HttpServletRequest request, String... excludeParameter) {
+		Map<String, String> urlParams = extractUrlParams(request, excludeParameter);
 		String mode = urlParams.remove("$mode$").toUpperCase();
 		
 		if("QUERY".equals(mode))
@@ -84,7 +102,7 @@ public class QueryExecutor {
 	}
 	
 	// 提取url参数
-	private Map<String, String> extractUrlParams(HttpServletRequest request){
+	private Map<String, String> extractUrlParams(HttpServletRequest request, String... excludeParameter){
 		Map<String, String> urlParams = new HashMap<String, String>(16);
 		
 		Enumeration<String> parameterNames = request.getParameterNames();
@@ -92,8 +110,10 @@ public class QueryExecutor {
 			String key = null;
 			while(parameterNames.hasMoreElements()){
 				key = parameterNames.nextElement();// 获取key
-				if(key.equals("_"))
-					continue;
+				for(String exclude: excludeParameter)
+					if(key.equals(exclude))
+						continue;
+				
 				urlParams.put(key, request.getParameter(key).trim());
 			}
 		}
@@ -184,10 +204,5 @@ public class QueryExecutor {
 		
 		Object[] values = val.split(",");
 		return new Parameter(false, Operator.valueOf(value.substring(0, splitIndex).toUpperCase()), name, values);
-	}
-	
-	// 执行查询
-	private Response execute_(String name, Object sqlParameter, QueryCriteriaEntity entity) {
-		return new Response(entity.getMode().executeQuery(name, sqlParameter, entity.getParameters()));
 	}
 }
