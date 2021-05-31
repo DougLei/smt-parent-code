@@ -108,11 +108,12 @@ public class QueryExecutor {
 		Enumeration<String> parameterNames = request.getParameterNames();
 		if(parameterNames != null && parameterNames.hasMoreElements()){
 			String key = null;
+			top: 
 			while(parameterNames.hasMoreElements()){
 				key = parameterNames.nextElement();// 获取key
 				for(String exclude: excludeParameter)
 					if(key.equals(exclude))
-						continue;
+						continue top;
 				
 				urlParams.put(key, request.getParameter(key).trim());
 			}
