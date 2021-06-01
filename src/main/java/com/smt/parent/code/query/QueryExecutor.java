@@ -49,8 +49,25 @@ public class QueryExecutor {
 		return new Response(entity.getMode().executeQuery(name, sqlParameter, entity.getParameters()));
 	}
 	
-	// 解析获取QueryCriteriaEntity
-	private QueryCriteriaEntity parse(HttpServletRequest request, String... excludeParameter) {
+	/**
+	 * 执行查询
+	 * @param name
+	 * @param sqlParameter
+	 * @param entity
+	 * @return
+	 */
+	@Transaction(propagationBehavior=PropagationBehavior.SUPPORTS)
+	public Response execute(String name, Object sqlParameter, QueryCriteriaEntity entity) {
+		return new Response(entity.getMode().executeQuery(name, sqlParameter, entity.getParameters()));
+	} 
+	
+	/**
+	 * 解析获取QueryCriteriaEntity
+	 * @param request
+	 * @param excludeParameter
+	 * @return
+	 */
+	public QueryCriteriaEntity parse(HttpServletRequest request, String... excludeParameter) {
 		Map<String, String> urlParams = extractUrlParams(request, excludeParameter);
 		String mode = urlParams.remove("$mode$").toUpperCase();
 		
