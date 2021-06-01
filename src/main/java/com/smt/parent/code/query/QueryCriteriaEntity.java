@@ -13,7 +13,7 @@ public class QueryCriteriaEntity {
 	private Mode mode;
 	private List<AbstractParameter> parameters;
 	
-	QueryCriteriaEntity(Mode mode, List<AbstractParameter> parameters) {
+	public QueryCriteriaEntity(Mode mode, List<AbstractParameter> parameters) {
 		this.mode = mode;
 		this.parameters = parameters;
 	}
