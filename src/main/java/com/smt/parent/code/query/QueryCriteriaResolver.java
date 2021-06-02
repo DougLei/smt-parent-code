@@ -2,6 +2,7 @@ package com.smt.parent.code.query;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,6 @@ import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.Operator;
 import com.douglei.orm.sessionfactory.sessions.session.sqlquery.impl.Parameter;
 import com.douglei.orm.sessionfactory.sessions.sqlsession.PageRecursiveEntity;
 import com.douglei.orm.sessionfactory.sessions.sqlsession.RecursiveEntity;
-import com.douglei.tools.StringUtil;
 import com.smt.parent.code.filters.log.HttpServletRequest4Log;
 import com.smt.parent.code.query.mode.Mode;
 import com.smt.parent.code.query.mode.impl.CountQueryMode;
@@ -42,7 +42,7 @@ public class QueryCriteriaResolver implements HandlerMethodArgumentResolver {
 
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-		return resolve(JSONObject.parseObject(((HttpServletRequest4Log)webRequest.getNativeRequest(HttpServletRequest.class)).getRequestBody2String()));
+		return parse(JSONObject.parseObject(((HttpServletRequest4Log)webRequest.getNativeRequest(HttpServletRequest.class)).getRequestBody2String()));
 	}
 	
 	/**
@@ -50,9 +50,12 @@ public class QueryCriteriaResolver implements HandlerMethodArgumentResolver {
 	 * @param json
 	 * @return
 	 */
-	public QueryCriteriaEntity resolve(JSONObject json) {
-		String mode = json.getString("$mode$").toUpperCase();
+	public QueryCriteriaEntity parse(Map<String, Object> json) {
+		Object mode = json.remove("$mode$");
+		if(mode == null)
+			throw new IllegalArgumentException("必须通过$mode$指定查询方式");
 		
+		mode = mode.toString().toUpperCase();
 		if("QUERY".equals(mode))
 			return build(new QueryMode(), json);
 		
@@ -60,13 +63,13 @@ public class QueryCriteriaResolver implements HandlerMethodArgumentResolver {
 			return build(new UniqueQueryMode(), json);
 		
 		if("LIMIT_QUERY".equals(mode))
-			return build(new LimitQueryMode(json.getIntValue("$startRow$"), json.getIntValue("$length$")), json);
+			return build(new LimitQueryMode(Integer.parseInt(json.remove("_startRow").toString()), Integer.parseInt(json.remove("_length").toString())), json);
 		
 		if("COUNT_QUERY".equals(mode))
 			return build(new CountQueryMode(), json);
 		
 		if("PAGE_QUERY".equals(mode))
-			return build(new PageQueryMode(json.getIntValue("_page"), json.getIntValue("_rows")), json);
+			return build(new PageQueryMode(Integer.parseInt(json.remove("_page").toString()), Integer.parseInt(json.remove("_rows").toString())), json);
 		
 		if("RECURSIVE_QUERY".equals(mode)) {
 			RecursiveEntity entity = new RecursiveEntity();
@@ -75,7 +78,7 @@ public class QueryCriteriaResolver implements HandlerMethodArgumentResolver {
 		}
 		
 		if("PAGE_RECURSIVE_QUERY".equals(mode)) {
-			PageRecursiveEntity entity = new PageRecursiveEntity(json.getIntValue("_page"), json.getIntValue("_rows"));
+			PageRecursiveEntity entity = new PageRecursiveEntity(Integer.parseInt(json.remove("_page").toString()), Integer.parseInt(json.remove("_rows").toString()));
 			setPropertyValues(json, entity);
 			return build(new PageRecursiveQueryMode(entity), json);
 		}
@@ -84,35 +87,61 @@ public class QueryCriteriaResolver implements HandlerMethodArgumentResolver {
 	}
 	
 	// 设置entity的属性值
-	private void setPropertyValues(JSONObject json, RecursiveEntity entity) {
-		Integer deep = json.getInteger("$deep$");
+	private void setPropertyValues(Map<String, Object> json, RecursiveEntity entity) {
+		json.remove("_recursive");
+		
+		Object deep = json.remove("_deep");
 		if(deep != null)
-			entity.setDeep(deep);
+			entity.setDeep(Integer.parseInt(deep.toString()));
 		
-		String column = json.getString("$column$");
-		if(StringUtil.unEmpty(column))
-			entity.setColumn(column);
+		Object column = json.remove("$column$");
+		if(column != null)
+			entity.setColumn(column.toString());
 		
-		String parentColumn = json.getString("$parentColumn$");
-		if(StringUtil.unEmpty(parentColumn))
-			entity.setParentColumn(parentColumn);
+		Object parentColumn = json.remove("_pcName");
+		if(parentColumn != null)
+			entity.setParentColumn(parentColumn.toString());
 		
-		String children = json.getString("$children$");
-		if(StringUtil.unEmpty(children))
-			entity.setChildren(children);
+		Object children = json.remove("$children$");
+		if(children != null)
+			entity.setChildren(children.toString());
 		
-		String values = json.getString("$values$");
-		if(StringUtil.unEmpty(values))
-			entity.setValue(values.split(","));
+		
+		// TODO 尝试从_root中获取筛选根的条件, 目前只能筛选出parent_id的条件值, 其他筛选条件抛弃, 后期完善这块的功能
+		List<String> temp = new ArrayList<String>(json.size());
+		for(Entry<String, Object> entry: json.entrySet()) {
+			if(!entry.getKey().startsWith("_root."))
+				continue;
+				
+			temp.add(entry.getKey());
+			if(entry.getKey().equals("_root."+entity.getParentColumn()) && entry.getValue() != null)
+				entity.setValue(entry.getValue().toString().split(","));
+		}
+		if(temp.size() > 0) 
+			temp.forEach(t -> json.remove(t));
 	}
 	
 	// 构建QueryCriteriaEntity实例
-	private QueryCriteriaEntity build(Mode mode, JSONObject json) {
+	private QueryCriteriaEntity build(Mode mode, Map<String, Object> json) {
 		List<AbstractParameter> parameters = null;
-		for(Entry<String, Object> entry : json.entrySet()) {
-			if(entry.getKey().charAt(0) == '$')
-				continue;
+		
+		// 提取出排序
+		Object sorts = json.remove("_sort");
+		if(sorts != null) {
+			if(parameters == null)
+				parameters = new ArrayList<AbstractParameter>();
 			
+			for(String sort: sorts.toString().split(",")) {
+				String[] array = sort.trim().split(" ");
+				if(array.length==1)
+					parameters.add(new Parameter(false, Operator.ORDER, array[0]));
+				else
+					parameters.add(new Parameter(false, Operator.ORDER, array[0], array[1]));
+			}
+		}
+		
+		// 解析其他
+		for(Entry<String, Object> entry : json.entrySet()) {
 			if(parameters == null)
 				parameters = new ArrayList<AbstractParameter>();
 			parameters.add(getParameter(entry.getKey(), entry.getValue().toString()));
@@ -131,6 +160,9 @@ public class QueryCriteriaResolver implements HandlerMethodArgumentResolver {
 			if(value.charAt(splitIndex) == '(')
 				break;
 		}
+		
+		if(splitIndex == value.length())
+			return new Parameter(false, Operator.EQ, name, value);
 		
 		String val = value.substring(splitIndex+1, value.length()-1);
 		if(val.equalsIgnoreCase("null"))
