@@ -11,7 +11,7 @@ import com.smt.parent.code.response.Response;
 public class LogRequest {
 	private int id;
 	private int operationId;
-	private String apiAddr;
+	private String url;
 	private String method;
 	private String urlData;
 	private String reqBody;
@@ -46,11 +46,11 @@ public class LogRequest {
 	public void setOperationId(int operationId) {
 		this.operationId = operationId;
 	}
-	public String getApiAddr() {
-		return apiAddr;
+	public String getUrl() {
+		return url;
 	}
-	public void setApiAddr(String apiAddr) {
-		this.apiAddr = apiAddr;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	public String getMethod() {
 		return method;
