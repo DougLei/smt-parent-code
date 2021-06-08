@@ -1,5 +1,6 @@
 package com.smt.parent.code.filters.token;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.UUID;
  * 
  * @author DougLei
  */
-public class TokenEntity {
+public class TokenEntity implements Serializable{
 	private String value;// token值
 	private int accountId;// 账户id
 	private String userId; // 用户id
@@ -21,7 +22,6 @@ public class TokenEntity {
 	private List<String> parentProjectCodes; // 当前项目的所有父项目code
 	private String tenantId;// 租户id
 	private Date loginDate;// 登陆时间
-	private Date lastOpDate;// 最后操作时间
 	private int clientType; // 客户端类型
 	private String clientIp;// 登陆的客户端ip
 	private Map<String, Object> extend; // 扩展信息
@@ -58,9 +58,6 @@ public class TokenEntity {
 	}
 	public Date getLoginDate() {
 		return loginDate;
-	}
-	public Date getLastOpDate() {
-		return lastOpDate;
 	}
 	public int getClientType() {
 		return clientType;
@@ -105,9 +102,6 @@ public class TokenEntity {
 	}
 	public void setLoginDate(Date loginDate) {
 		this.loginDate = loginDate;
-	}
-	public void setLastOpDate(Date lastOpDate) {
-		this.lastOpDate = lastOpDate;
 	}
 	public void setClientType(int clientType) {
 		this.clientType = clientType;
