@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.smt.parent.code.filters.cors.CorsFilter;
+import com.smt.parent.code.filters.license.LicenseFilter;
 import com.smt.parent.code.filters.log.LogFilter;
 import com.smt.parent.code.filters.log.LogPersistenceHandler;
 import com.smt.parent.code.filters.token.TokenConfigurationProperties;
@@ -14,18 +15,36 @@ import com.smt.parent.code.filters.token.TokenFilter;
 import com.smt.parent.code.spring.eureka.cloud.feign.RestTemplateWrapper;
 
 /**
- * 过滤器注册器
+ * 
  * @author DougLei
  */
 @Configuration
 public class FilterRegistry {
 	
 	/**
-	 * 注册cors过滤器, 默认注册
+	 * 注册license过滤器, 必须注册
 	 * @return
 	 */
 	@Bean
-	@ConditionalOnExpression("${smt.parent.code.filter.cors.enable:true}")
+	public FilterRegistrationBean<LicenseFilter> licenseFilter(){
+		FilterRegistrationBean<LicenseFilter> registration = new FilterRegistrationBean<LicenseFilter>();
+		registration.setFilter(licenseFilterBean());
+		registration.setName(FilterEnum.LICENSE.getName());
+		registration.addUrlPatterns(FilterEnum.LICENSE.getUrlPatterns());
+		registration.setOrder(FilterEnum.LICENSE.getOrder());
+		return registration;
+	}
+	@Bean
+	public LicenseFilter licenseFilterBean() {
+		return new LicenseFilter();
+	}
+	
+	// -----------------------------------------------------------------------------------------------
+	/**
+	 * 注册cors过滤器, 必须注册
+	 * @return
+	 */
+	@Bean
 	public FilterRegistrationBean<CorsFilter> corsFilter(){
 		FilterRegistrationBean<CorsFilter> registration = new FilterRegistrationBean<CorsFilter>();
 		registration.setFilter(coreFilterBean());
@@ -35,7 +54,6 @@ public class FilterRegistry {
 		return registration;
 	}
 	@Bean
-	@ConditionalOnExpression("${smt.parent.code.filter.cors.enable:true}")
 	public CorsFilter coreFilterBean() {
 		return new CorsFilter();
 	}

@@ -7,14 +7,19 @@ package com.smt.parent.code.filters;
 public enum FilterEnum {
 	
 	/**
+	 * License过滤器
+	 */
+	LICENSE(10),
+	
+	/**
 	 * 跨域过滤器
 	 */
-	CORS(10),
+	CORS(20),
 	
 	/**
 	 * 日志过滤器
 	 */
-	LOG(20) {
+	LOG(30) {
 		@Override
 		public String getHeaderName() {
 			return "_log";
@@ -24,7 +29,7 @@ public enum FilterEnum {
 	/**
 	 * token过滤器
 	 */
-	TOKEN(30) {
+	TOKEN(40) {
 		@Override
 		public String getHeaderName() {
 			return "token";

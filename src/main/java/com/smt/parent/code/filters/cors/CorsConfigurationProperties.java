@@ -10,19 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix="smt.parent.code.filter.cors")
 public class CorsConfigurationProperties {
-	private boolean enable=true; // 是否启用过滤器, 默认为true
 	private String accessControlAllowOrigin="*";// 指定允许跨域访问的其他域名
 	private String accessControlAllowMethods;// 指定跨域访问时可使用的方法
 	private String accessControlAllowHeaders;// 指定跨域访问时可携带的header
 	private boolean accessControlAllowCredentials;// 指定跨域访问时是否可以携带cookie
 	private String accessControlMaxAge;// 指定本次预检请求的有效期, 单位为秒, 在此期间不用发出另一条预检请求
 	
-	public boolean isEnable() {
-		return enable;
-	}
-	public void setEnable(boolean enable) {
-		this.enable = enable;
-	}
 	public String getAccessControlAllowOrigin() {
 		return accessControlAllowOrigin;
 	}
