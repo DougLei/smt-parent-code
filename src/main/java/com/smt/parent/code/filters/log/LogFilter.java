@@ -100,6 +100,8 @@ public class LogFilter implements Filter{
 		if(log == null)
 			return;
 		
+		if(log.getUserId() == null)
+			log.setUserId("------------------------------------");
 		handler.save(log);
 	}
 }
