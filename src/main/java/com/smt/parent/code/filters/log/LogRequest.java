@@ -1,6 +1,8 @@
 package com.smt.parent.code.filters.log;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.smt.parent.code.response.Response;
 
@@ -32,6 +34,27 @@ public class LogRequest {
 			this.respBody = response.toJSONString();
 		this.respDate = new Date();
 		this.state = response.getState();
+	}
+	
+	/**
+	 * 转换为Map
+	 * @return
+	 */
+	public Map<String, Object> toMap() {
+		Map<String, Object> map = new HashMap<String, Object>(16);
+		map.put("ID", id);
+		map.put("OPERATION_ID", operationId);
+		map.put("URL", url);
+		map.put("METHOD", method);
+		map.put("URL_DATA", urlData);
+		map.put("REQ_BODY", reqBody);
+		map.put("REQ_DATE", reqDate);
+		map.put("RESP_BODY", respBody);
+		map.put("RESP_DATE", respDate);
+		map.put("STATE", state);
+		map.put("ORDER_", order);
+		map.put("DESCRIPTION", description);
+		return map;
 	}
 	
 	public int getId() {

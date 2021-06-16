@@ -56,10 +56,10 @@ public class TokenFilter implements Filter {
 	private boolean validate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		TokenValidateResult result = validate_(req);
 		
-		// 在日志中记录请求操作的用户id
+		// 记录日志关联用户/项目/租户的唯一标识
 		TokenEntity entity = result.getEntity();
 		if(entity != null) 
-			LogContext.loggingUserId(entity.getUserId());
+			LogContext.loggingIds(entity.getUserId(), entity.getProjectCode(), entity.getTenantId());
 			
 		// 验证成功, 则记录token数据, 并继续
 		if(result.isSuccess()) {

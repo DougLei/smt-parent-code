@@ -1,6 +1,8 @@
 package com.smt.parent.code.filters.log;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 
@@ -18,10 +20,35 @@ public class LogOperation {
 	private String componentName;
 	private String funcId;
 	private String funcName;
+	private String clientIp;
 	private String userId;
 	private Date operDate;
-	private String clientIp;
+	private String projectCode;
+	private String tenantId;
 	private LogRequest logRequest;
+	
+	/**
+	 * 转换为Map
+	 * @return
+	 */
+	public Map<String, Object> toMap() {
+		Map<String, Object> map = new HashMap<String, Object>(32);
+		map.put("ID", id);
+		map.put("BATCH", batch);
+		map.put("TYPE_", type);
+		map.put("LEVEL_", level);
+		map.put("DESCRIPTION", description);
+		map.put("MODULE_ID", moduleId);
+		map.put("MODULE_NAME", moduleName);
+		map.put("COMPONENT_ID", componentId);
+		map.put("COMPONENT_NAME", componentName);
+		map.put("FUNC_ID", funcId);
+		map.put("FUNC_NAME", funcName);
+		map.put("CLIENT_IP", clientIp);
+		map.put("USER_ID", userId);
+		map.put("OPER_DATE", operDate);
+		return map;
+	}
 	
 	public int getId() {
 		return id;
@@ -89,6 +116,12 @@ public class LogOperation {
 	public void setFuncName(String funcName) {
 		this.funcName = funcName;
 	}
+	public String getClientIp() {
+		return clientIp;
+	}
+	public void setClientIp(String clientIp) {
+		this.clientIp = clientIp;
+	}
 	public String getUserId() {
 		return userId;
 	}
@@ -101,11 +134,15 @@ public class LogOperation {
 	public void setOperDate(Date operDate) {
 		this.operDate = operDate;
 	}
-	public String getClientIp() {
-		return clientIp;
+	public String getProjectCode() {
+		return projectCode;
 	}
-	public void setClientIp(String clientIp) {
-		this.clientIp = clientIp;
+	public String getTenantId() {
+		return tenantId;
+	}
+	public void setProjectAndTenant(String projectCode, String tenantId) {
+		this.projectCode = projectCode;
+		this.tenantId = tenantId;
 	}
 	public LogRequest getLogRequest() {
 		return logRequest;
