@@ -114,8 +114,8 @@ public class TokenEntity implements Serializable{
 	}
 	
 	// -------------------------------------------------------------------------------------------------
-	private Date currentDate; // 当前时间
-	private String uuid; // uuid
+	private transient Date currentDate; // 当前时间
+	private transient String uuid; // uuid
 	public Date getCurrentDate() {
 		if(currentDate == null)
 			currentDate = new Date();

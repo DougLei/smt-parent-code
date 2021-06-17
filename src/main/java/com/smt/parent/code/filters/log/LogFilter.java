@@ -75,10 +75,10 @@ public class LogFilter implements Filter{
 	 */
 	private LogRequest extractRequestLog(HttpServletRequest request, LogOperation operation) throws IOException {
 		LogRequest logRequest = new LogRequest();
-		String query = request.getQueryString();
-		logRequest.setUrl(request.getContextPath() + request.getServletPath() + (query==null?"":'?'+query));
+		logRequest.setUrl(request.getContextPath() + request.getServletPath());
 		logRequest.setMethod(request.getMethod());
-		logRequest.setUrlData(request.getQueryString() == null?null:URLDecoder.decode(request.getQueryString(), "utf-8"));
+		String query = request.getQueryString();
+		logRequest.setUrlData(query == null?null:URLDecoder.decode(query, "utf-8"));
 		logRequest.setReqBody(extractRequestBody(request));
 		logRequest.setReqDate(operation.getOperDate());
 		return logRequest;
