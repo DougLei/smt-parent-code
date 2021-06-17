@@ -25,7 +25,7 @@ public class LogOperation {
 	private Date operDate;
 	private String projectCode;
 	private String tenantId;
-	private String invalidToken; // 无效的token值
+	private String token; // token值
 	private LogRequest logRequest;
 	
 	/**
@@ -51,12 +51,12 @@ public class LogOperation {
 	}
 	
 	/**
-	 * 转换为无效Token的Map
+	 * 转换为ErrorToken的Map
 	 * @return
 	 */
-	public Map<String, Object> toInvalidTokenMap() {
+	public Map<String, Object> toErrorTokenMap() {
 		Map<String, Object> map = new HashMap<String, Object>(16);
-		map.put("TOKEN", invalidToken);
+		map.put("TOKEN", token);
 		map.put("CLIENT_IP", clientIp);
 		map.put("URL", logRequest.getUrl());
 		map.put("METHOD", logRequest.getMethod());
@@ -162,11 +162,11 @@ public class LogOperation {
 		this.projectCode = projectCode;
 		this.tenantId = tenantId;
 	}
-	public String getInvalidToken() {
-		return invalidToken;
+	public String getToken() {
+		return token;
 	}
-	public void setInvalidToken(String invalidToken) {
-		this.invalidToken = invalidToken;
+	public void setToken(String token) {
+		this.token = token;
 	}
 	public LogRequest getLogRequest() {
 		return logRequest;

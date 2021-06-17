@@ -29,15 +29,15 @@ public class LogContext {
 	}
 	
 	/**
-	 * 日志记录无效的token
+	 * 日志记录token值
 	 * @param token
 	 */
-	public static void loggingInvalidToken(String token) {
+	public static void loggingToken(String token) {
 		LogOperation log = LOG_CONTEXT.get();
 		if(log == null)
 			return;
 		
-		log.setInvalidToken(token);
+		log.setToken(token);
 	}
 	
 	/**
