@@ -29,7 +29,19 @@ public class LogContext {
 	}
 	
 	/**
-	 * 记录日志关联用户/项目/租户的唯一标识
+	 * 日志记录无效的token
+	 * @param token
+	 */
+	public static void loggingInvalidToken(String token) {
+		LogOperation log = LOG_CONTEXT.get();
+		if(log == null)
+			return;
+		
+		log.setInvalidToken(token);
+	}
+	
+	/**
+	 * 日志记录用户/项目/租户的唯一标识
 	 * @param userId
 	 * @param projectCode
 	 * @param tenantId

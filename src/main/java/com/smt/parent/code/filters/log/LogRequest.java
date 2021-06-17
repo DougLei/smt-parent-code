@@ -42,7 +42,6 @@ public class LogRequest {
 	 */
 	public Map<String, Object> toMap() {
 		Map<String, Object> map = new HashMap<String, Object>(16);
-		map.put("ID", id);
 		map.put("OPERATION_ID", operationId);
 		map.put("URL", url);
 		map.put("METHOD", method);

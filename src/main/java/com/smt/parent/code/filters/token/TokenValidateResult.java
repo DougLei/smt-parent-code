@@ -6,6 +6,7 @@ package com.smt.parent.code.filters.token;
  */
 public class TokenValidateResult {
 	private boolean success; // 验证是否成功
+	private String token; // token值
 	private TokenEntity entity; // token数据, 验证成功时会存储相应的数据
 	private String message; // 记录验证失败时的消息
 	private String code; // 记录验证失败时的国际化编码
@@ -15,6 +16,12 @@ public class TokenValidateResult {
 	public TokenValidateResult(TokenEntity entity) {
 		this.success = true;
 		this.entity = entity;
+	}
+	public TokenValidateResult(String token, String message, String code, Object... params) {
+		this.token = token;
+		this.message = message;
+		this.code = code;
+		this.params = params;
 	}
 	public TokenValidateResult(TokenEntity entity, String message, String code, Object... params) {
 		this.entity = entity;
@@ -28,6 +35,12 @@ public class TokenValidateResult {
 	}
 	public void setSuccess(boolean success) {
 		this.success = success;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 	public TokenEntity getEntity() {
 		return entity;
