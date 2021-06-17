@@ -22,7 +22,7 @@ public enum FilterEnum {
 	LOG(30) {
 		@Override
 		public String getHeaderName() {
-			return "_log";
+			return "log";
 		}
 	},
 	
