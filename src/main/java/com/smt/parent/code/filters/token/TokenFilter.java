@@ -59,7 +59,7 @@ public class TokenFilter implements Filter {
 			
 		// 验证成功, 则在日志中记录用户/项目/租户的唯一标识, 并记录token数据
 		if(result.isSuccess()) {
-			LogContext.loggingIds(entity.getUserId(), entity.getProjectCode(), entity.getTenantId());
+			LogContext.loggingIds(entity.getUserId(), entity.getUserName(), entity.getProjectCode(), entity.getTenantId());
 			TokenContext.set(entity);
 			return true;
 		}

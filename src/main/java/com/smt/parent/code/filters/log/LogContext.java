@@ -43,15 +43,17 @@ public class LogContext {
 	/**
 	 * 日志记录用户/项目/租户的唯一标识
 	 * @param userId
+	 * @param userName
 	 * @param projectCode
 	 * @param tenantId
 	 */
-	public static void loggingIds(String userId, String projectCode, String tenantId) {
+	public static void loggingIds(String userId, String userName, String projectCode, String tenantId) {
 		LogOperation log = LOG_CONTEXT.get();
 		if(log == null)
 			return;
 		
 		log.setUserId(userId);
+		log.setUserName(userName);
 		log.setProjectAndTenant(projectCode, tenantId);
 	}
 	

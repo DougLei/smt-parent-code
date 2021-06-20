@@ -22,6 +22,7 @@ public class LogOperation {
 	private String funcName;
 	private String clientIp;
 	private String userId;
+	private String userName;
 	private Date operDate;
 	private String projectCode;
 	private String tenantId;
@@ -46,6 +47,7 @@ public class LogOperation {
 		map.put("FUNC_NAME", funcName);
 		map.put("CLIENT_IP", clientIp);
 		map.put("USER_ID", userId);
+		map.put("USER_NAME", userName);
 		map.put("OPER_DATE", operDate);
 		return map;
 	}
@@ -145,6 +147,12 @@ public class LogOperation {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public Date getOperDate() {
 		return operDate;
