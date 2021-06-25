@@ -29,7 +29,7 @@ public class LicenseFilter implements Filter{
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		this.app = new LicenseValidateApp(properties.getPublicKey());
+		this.app = new LicenseValidateApp(properties.getLicenseFilepath(), properties.getPublicKey());
 		this.app.startup();
 	}
 
